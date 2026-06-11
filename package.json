@@ -1,0 +1,28 @@
+{
+  "name": "civil-defense-platform",
+  "version": "1.0.0",
+  "description": "人防工程管理平台 - 后端 API 服务",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "seed": "node scripts/seed.js",
+    "test": "node --test"
+  },
+  "keywords": [
+    "civil-defense",
+    "express",
+    "mysql",
+    "rest-api"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.0"
+  },
+  "devDependencies": {
+    "supertest": "^7.0.0"
+  }
+}

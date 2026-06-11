@@ -1,0 +1,41 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: civildefense-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: civildefense
+      MYSQL_USER: cd
+      MYSQL_PASSWORD: cdpass
+    ports:
+      - "13346:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-prootpass"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  app:
+    build: .
+    container_name: civildefense-api
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PORT: 5070
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: cd
+      DB_PASSWORD: cdpass
+      DB_NAME: civildefense
+      JWT_SECRET: civil-defense-dev-secret
+    ports:
+      - "5070:5070"
+
+volumes:
+  db_data:
