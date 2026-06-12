@@ -26,12 +26,19 @@ CREATE TABLE IF NOT EXISTS projects (
     peacetime_use   VARCHAR(128) NOT NULL DEFAULT '',
     status          VARCHAR(16)  NOT NULL DEFAULT 'NORMAL',
     completed_at    DATE         NULL,
+    longitude       DECIMAL(11,8) NULL COMMENT '经度（WGS84）',
+    latitude        DECIMAL(10,8) NULL COMMENT '纬度（WGS84）',
+    location        POINT        NULL SRID 4326 COMMENT '中心点坐标（空间索引用）',
+    boundary        POLYGON      NULL SRID 4326 COMMENT '工程占地范围多边形',
+    service_radius  INT          NOT NULL DEFAULT 500 COMMENT '服务覆盖半径（米）',
     created_at      DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     updated_at      DATETIME(3)  NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
     PRIMARY KEY (id),
     UNIQUE KEY uk_projects_code (code),
     KEY idx_projects_status (status),
-    KEY idx_projects_district (district)
+    KEY idx_projects_district (district),
+    SPATIAL KEY idx_projects_location (location),
+    SPATIAL KEY idx_projects_boundary (boundary)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS equipments (
